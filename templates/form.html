@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}{{ submit_label }} - Ficha RPG{% endblock %}
+
+{% block content %}
+<section class="section">
+    <h1>{{ submit_label }}</h1>
+    <form class="form" action="{{ form_action }}" method="post" enctype="multipart/form-data">
+        <div class="form-grid">
+            <label>
+                Nome
+                <input type="text" name="name" value="{{ character.name }}" required>
+            </label>
+            <label>
+                Raça
+                <input type="text" name="race" value="{{ character.race }}">
+            </label>
+            <label>
+                Classe
+                <input type="text" name="character_class" value="{{ character.character_class }}">
+            </label>
+            <label>
+                Antecedente
+                <input type="text" name="background" value="{{ character.background }}">
+            </label>
+            <label>
+                Nível
+                <input type="number" name="level" min="1" value="{{ character.level }}">
+            </label>
+            <label>
+                Pontos de Vida
+                <input type="text" name="hit_points" value="{{ character.hit_points }}">
+            </label>
+            <label>
+                Classe de Armadura
+                <input type="text" name="armor_class" value="{{ character.armor_class }}">
+            </label>
+            <label>
+                Deslocamento
+                <input type="text" name="speed" value="{{ character.speed }}">
+            </label>
+        </div>
+
+        <fieldset class="form-fieldset">
+            <legend>Atributos</legend>
+            <div class="attributes-grid">
+                {% for key, label in attribute_fields %}
+                    <label>
+                        {{ label }}
+                        <input type="number" name="attr_{{ key }}" value="{{ character.attributes[key] }}">
+                    </label>
+                {% endfor %}
+            </div>
+        </fieldset>
+
+        <label>
+            Perícias &amp; Proficiências
+            <textarea name="proficiencies" rows="4">{{ character.proficiencies }}</textarea>
+        </label>
+        <label>
+            Equipamentos
+            <textarea name="equipment" rows="4">{{ character.equipment }}</textarea>
+        </label>
+        <label>
+            Magias
+            <textarea name="spells" rows="4">{{ character.spells }}</textarea>
+        </label>
+        <label>
+            Anotações
+            <textarea name="notes" rows="4">{{ character.notes }}</textarea>
+        </label>
+
+        <div class="image-upload">
+            <label>
+                Retrato do personagem
+                <input type="file" name="image" accept="image/*">
+            </label>
+            {% if character.image %}
+                <div class="image-preview">
+                    <span>Imagem atual:</span>
+                    <img src="{{ url_for('static', filename=character.image) }}" alt="Retrato atual">
+                </div>
+            {% endif %}
+        </div>
+
+        <button class="button" type="submit">{{ submit_label }}</button>
+    </form>
+</section>
+{% endblock %}

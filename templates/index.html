@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Personagens - Ficha RPG{% endblock %}
+
+{% block content %}
+<section class="section">
+    <h1>Personagens</h1>
+    {% if characters %}
+        <div class="grid">
+            {% for character in characters %}
+                <article class="card">
+                    {% if character.image %}
+                        <img class="card-image" src="{{ url_for('static', filename=character.image) }}" alt="Retrato de {{ character.name }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h2>{{ character.name }}</h2>
+                        <p><strong>Classe:</strong> {{ character.character_class or '—' }}</p>
+                        <p><strong>Raça:</strong> {{ character.race or '—' }}</p>
+                        <p><strong>Nível:</strong> {{ character.level or '—' }}</p>
+                    </div>
+                    <div class="card-actions">
+                        <a class="button" href="{{ url_for('view_character', character_id=character.id) }}">Ver ficha</a>
+                        <a class="button secondary" href="{{ url_for('edit_character', character_id=character.id) }}">Editar</a>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Nenhum personagem cadastrado ainda. Crie o primeiro!</p>
+    {% endif %}
+</section>
+{% endblock %}

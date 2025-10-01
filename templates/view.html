@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}{{ character.name }} - Ficha RPG{% endblock %}
+
+{% block content %}
+<section class="section character-detail">
+    <header class="detail-header">
+        <div>
+            <h1>{{ character.name }}</h1>
+            <p><strong>Classe:</strong> {{ character.character_class or "—" }} | <strong>Raça:</strong> {{ character.race or "—" }} | <strong>Nível:</strong> {{ character.level or "—" }}</p>
+            <p><strong>Antecedente:</strong> {{ character.background or "—" }}</p>
+        </div>
+        <div class="detail-actions">
+            <a class="button" href="{{ url_for('edit_character', character_id=character.id) }}">Editar</a>
+            <form method="post" action="{{ url_for('delete_character', character_id=character.id) }}" onsubmit="return confirm('Tem certeza que deseja excluir este personagem?');">
+                <button class="button danger" type="submit">Excluir</button>
+            </form>
+        </div>
+    </header>
+
+    <div class="detail-body">
+        {% if character.image %}
+            <div class="portrait">
+                <img src="{{ url_for('static', filename=character.image) }}" alt="Retrato de {{ character.name }}">
+            </div>
+        {% endif %}
+
+        <div class="stats">
+            <div class="stats-grid">
+                <div class="stat"><span>PV</span><strong>{{ character.hit_points or "—" }}</strong></div>
+                <div class="stat"><span>CA</span><strong>{{ character.armor_class or "—" }}</strong></div>
+                <div class="stat"><span>Desloc.</span><strong>{{ character.speed or "—" }}</strong></div>
+            </div>
+
+            <table class="attributes-table">
+                <thead>
+                    <tr>
+                        {% for _key, label in attribute_fields %}
+                            <th>{{ label }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        {% for key, _label in attribute_fields %}
+                            <td>{{ character.attributes[key] }}</td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="detail-sections">
+        <section>
+            <h2>Perícias &amp; Proficiências</h2>
+            <p>{{ character.proficiencies | nl2br | safe if character.proficiencies else '—' }}</p>
+        </section>
+        <section>
+            <h2>Equipamentos</h2>
+            <p>{{ character.equipment | nl2br | safe if character.equipment else '—' }}</p>
+        </section>
+        <section>
+            <h2>Magias</h2>
+            <p>{{ character.spells | nl2br | safe if character.spells else '—' }}</p>
+        </section>
+        <section>
+            <h2>Anotações</h2>
+            <p>{{ character.notes | nl2br | safe if character.notes else '—' }}</p>
+        </section>
+    </div>
+</section>
+{% endblock %}
